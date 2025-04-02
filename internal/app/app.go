@@ -3,8 +3,10 @@ package app
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-chi/chi/v5"
 	"net/http"
 	"otus/internal/container"
+	"otus/internal/controller"
 	"otus/pkg/logger"
 	"otus/pkg/postgres"
 )
@@ -29,9 +31,12 @@ func Run(di container.Container) {
 	}
 	defer pg.Close()
 
-	http.HandleFunc("/health", handler)
+	r := chi.NewRouter()
+	r.Get("/", controller.GetUser)
+	r.Get("/health", handler)
+
 	fmt.Println("Сервер запущен на порту 8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":8080", r); err != nil {
 		fmt.Println("Ошибка при запуске сервера:", err)
 	}
 }
