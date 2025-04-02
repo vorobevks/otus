@@ -6,7 +6,7 @@ import (
 	"otus/internal/repository"
 )
 
-func GetUser() *entity.User {
+func GetUser(id int) *entity.User {
 	dataSourceName := "user=otus password=password dbname=otus sslmode=disable port=5435"
 
 	repo, err := repository.NewRepository(dataSourceName)
@@ -16,8 +16,7 @@ func GetUser() *entity.User {
 
 	defer repo.Close()
 
-	userID := 1 // Пример ID пользователя для поиска
-	user, _ := repo.GetUserByID(userID)
+	user, _ := repo.GetUserByID(id)
 
 	return user
 }

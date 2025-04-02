@@ -32,7 +32,7 @@ func Run(di container.Container) {
 	defer pg.Close()
 
 	r := chi.NewRouter()
-	r.Get("/", controller.GetUser)
+	r.Get("/user/{id}", controller.GetUser)
 	r.Get("/health", handler)
 
 	fmt.Println("Сервер запущен на порту 8080")

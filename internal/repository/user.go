@@ -26,11 +26,16 @@ func NewRepository(dataSourceName string) (*Repository, error) {
 
 func (r *Repository) GetUserByID(id int) (*entity.User, error) {
 	var user entity.User
-	query := "SELECT id, name FROM users WHERE id = $1"
+	query := "SELECT id, username, name, created_at  FROM users WHERE id = $1"
 
 	row := r.db.QueryRow(query, id)
 
-	if err := row.Scan(&user.ID, &user.Name); err != nil {
+	if err := row.Scan(
+		&user.ID,
+		&user.Username,
+		&user.Name,
+		&user.CreatedAt,
+	); err != nil {
 		return nil, err
 	}
 
