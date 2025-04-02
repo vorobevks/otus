@@ -1,9 +1,12 @@
-package main
+package app
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"otus/internal/container"
+	"otus/pkg/logger"
+	"otus/pkg/postgres"
 )
 
 type Response struct {
@@ -16,7 +19,16 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func main() {
+func Run(di container.Container) {
+	l := logger.New(di.Config.Log.Level)
+
+	pg, err := postgres.New(di.Config.PG.URL, postgres.MaxPoolSize(di.Config.PG.PoolMax))
+
+	if err != nil {
+		l.Fatal(fmt.Errorf("app - Run - postgres.New: %w", err))
+	}
+	defer pg.Close()
+
 	http.HandleFunc("/health", handler)
 	fmt.Println("Сервер запущен на порту 8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
