@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	_ "github.com/lib/pq"
+	"otus/config"
 	"otus/internal/entity"
 )
 
@@ -10,8 +11,9 @@ type Repository struct {
 	db *sql.DB
 }
 
-func NewRepository(dataSourceName string) (*Repository, error) {
-	db, err := sql.Open("postgres", dataSourceName)
+func NewRepository() (*Repository, error) {
+	cfg, err := config.NewConfig()
+	db, err := sql.Open("postgres", cfg.PG.URL)
 	if err != nil {
 		return nil, err
 	}

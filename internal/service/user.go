@@ -7,9 +7,7 @@ import (
 )
 
 func GetUser(id int) *entity.User {
-	dataSourceName := "user=otus password=password dbname=otus sslmode=disable port=5435"
-
-	repo, err := repository.NewRepository(dataSourceName)
+	repo, err := repository.NewRepository()
 	if err != nil {
 		log.Fatalf("failed to connect to the database: %v", err)
 	}
@@ -22,8 +20,7 @@ func GetUser(id int) *entity.User {
 }
 
 func CreateUser(user *entity.User) *entity.User {
-	dataSourceName := "user=otus password=password dbname=otus sslmode=disable port=5435"
-	repo, err := repository.NewRepository(dataSourceName)
+	repo, err := repository.NewRepository()
 	if err != nil {
 		log.Fatalf("failed to connect to the database: %v", err)
 	}
@@ -36,8 +33,7 @@ func CreateUser(user *entity.User) *entity.User {
 }
 
 func UpdateUser(id int, user *entity.User) *entity.User {
-	dataSourceName := "user=otus password=password dbname=otus sslmode=disable port=5435"
-	repo, err := repository.NewRepository(dataSourceName)
+	repo, err := repository.NewRepository()
 	if err != nil {
 		log.Fatalf("failed to connect to the database: %v", err)
 	}
@@ -50,9 +46,7 @@ func UpdateUser(id int, user *entity.User) *entity.User {
 }
 
 func DeleteUser(id int) {
-	dataSourceName := "user=otus password=password dbname=otus sslmode=disable port=5435"
-
-	repo, err := repository.NewRepository(dataSourceName)
+	repo, err := repository.NewRepository()
 	if err != nil {
 		log.Fatalf("failed to connect to the database: %v", err)
 	}
