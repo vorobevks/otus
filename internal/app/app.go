@@ -35,6 +35,7 @@ func Run(di container.Container) {
 	r.Get("/user/{id}", controller.GetUser)
 	r.Post("/user", controller.CreateUser)
 	r.Put("/user/{id}", controller.UpdateUser)
+	r.Delete("/user/{id}", controller.DeleteUser)
 	r.Get("/health", handler)
 
 	fmt.Println("Сервер запущен на порту 8080")

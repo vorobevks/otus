@@ -48,3 +48,16 @@ func UpdateUser(id int, user *entity.User) *entity.User {
 
 	return updatedUser
 }
+
+func DeleteUser(id int) {
+	dataSourceName := "user=otus password=password dbname=otus sslmode=disable port=5435"
+
+	repo, err := repository.NewRepository(dataSourceName)
+	if err != nil {
+		log.Fatalf("failed to connect to the database: %v", err)
+	}
+
+	defer repo.Close()
+
+	repo.DeleteUserByID(id)
+}

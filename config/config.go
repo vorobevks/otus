@@ -33,7 +33,7 @@ func NewConfig() (*Config, error) {
 	}
 
 	if err := env.Parse(cfg); err != nil {
-		return cfg, fmt.Errorf("consdfsdfsdffig error: %w", err)
+		return cfg, fmt.Errorf("config error: %w", err)
 	}
 
 	return cfg, nil

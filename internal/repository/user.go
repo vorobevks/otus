@@ -80,6 +80,12 @@ func (r *Repository) UpdateUser(id int, user entity.User) (*entity.User, error) 
 	}, nil
 }
 
+func (r *Repository) DeleteUserByID(id int) {
+	query := "DELETE FROM users WHERE id = $1"
+
+	r.db.QueryRow(query, id)
+}
+
 func (r *Repository) Close() error {
 	return r.db.Close()
 }

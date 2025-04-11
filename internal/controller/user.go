@@ -54,7 +54,6 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode("user not found")
 	} else {
-
 		var requestUser entity.User
 		var updatedUser *entity.User
 		err := json.NewDecoder(r.Body).Decode(&requestUser)
@@ -69,5 +68,21 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(updatedUser)
+	}
+}
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	userIdStr := chi.URLParam(r, "id")
+	userId, _ := strconv.Atoi(userIdStr)
+
+	user := service.GetUser(userId)
+	if user == nil {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("user not found")
+	} else {
+		service.DeleteUser(userId)
+		w.WriteHeader(http.StatusNoContent)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(user)
 	}
 }
