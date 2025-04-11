@@ -16,8 +16,13 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 
 	user := service.GetUser(userId)
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(user)
+	if user == nil {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("user not found")
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(user)
+	}
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {

@@ -1,8 +1,6 @@
 package service
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"log"
 	"otus/internal/entity"
 	"otus/internal/repository"
@@ -32,14 +30,7 @@ func CreateUser(user *entity.User) *entity.User {
 
 	defer repo.Close()
 
-	user.Password = getMD5Hash(user.Password)
-
 	createdUser, _ := repo.CreateUser(*user)
 
 	return createdUser
-}
-
-func getMD5Hash(text string) string {
-	hash := md5.Sum([]byte(text))
-	return hex.EncodeToString(hash[:])
 }

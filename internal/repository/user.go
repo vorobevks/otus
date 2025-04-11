@@ -26,15 +26,17 @@ func NewRepository(dataSourceName string) (*Repository, error) {
 
 func (r *Repository) GetUserByID(id int) (*entity.User, error) {
 	var user entity.User
-	query := "SELECT id, username, name, created_at  FROM users WHERE id = $1"
+	query := "SELECT id, username, first_name, last_name, email, phone  FROM users WHERE id = $1"
 
 	row := r.db.QueryRow(query, id)
 
 	if err := row.Scan(
 		&user.ID,
 		&user.Username,
-		&user.Name,
-		&user.CreatedAt,
+		&user.FirstName,
+		&user.LastName,
+		&user.Email,
+		&user.Phone,
 	); err != nil {
 		return nil, err
 	}
@@ -44,9 +46,8 @@ func (r *Repository) GetUserByID(id int) (*entity.User, error) {
 
 func (r *Repository) CreateUser(user entity.User) (*entity.User, error) {
 	var id int
-	var createdAt string
-	query := "INSERT INTO users (username, name, password) VALUES ($1, $2, $3) RETURNING id, created_at"
-	err := r.db.QueryRow(query, user.Username, user.Name, user.Password).Scan(&id, &createdAt)
+	query := "INSERT INTO users (username, first_name, last_name, email, phone) VALUES ($1, $2, $3, $4, $5) RETURNING id"
+	err := r.db.QueryRow(query, user.Username, user.FirstName, user.LastName, user.Email, user.Phone).Scan(&id)
 	if err != nil {
 		return &entity.User{}, err
 	}
@@ -54,8 +55,10 @@ func (r *Repository) CreateUser(user entity.User) (*entity.User, error) {
 	return &entity.User{
 		ID:        id,
 		Username:  user.Username,
-		Name:      user.Name,
-		CreatedAt: createdAt,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+		Phone:     user.Phone,
 	}, nil
 }
 
