@@ -62,6 +62,24 @@ func (r *Repository) CreateUser(user entity.User) (*entity.User, error) {
 	}, nil
 }
 
+func (r *Repository) UpdateUser(id int, user entity.User) (*entity.User, error) {
+	var username string
+	query := "UPDATE users SET first_name = $1, last_name = $2, email = $3, phone = $4 WHERE id = $5 RETURNING id, username"
+	err := r.db.QueryRow(query, user.FirstName, user.LastName, user.Email, user.Phone, id).Scan(&id, &username)
+	if err != nil {
+		return &entity.User{}, err
+	}
+
+	return &entity.User{
+		ID:        id,
+		Username:  username,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+		Phone:     user.Phone,
+	}, nil
+}
+
 func (r *Repository) Close() error {
 	return r.db.Close()
 }
