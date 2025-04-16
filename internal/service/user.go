@@ -1,57 +1,37 @@
 package service
 
 import (
-	"log"
+	"otus/internal/container"
 	"otus/internal/entity"
-	"otus/internal/repository"
 )
 
-func GetUser(id int) *entity.User {
-	repo, err := repository.NewRepository()
-	if err != nil {
-		log.Fatalf("failed to connect to the database: %v", err)
-	}
+type UserService struct {
+	di container.Container
+}
 
-	defer repo.Close()
+func NewUserService(di container.Container) *UserService {
+	return &UserService{di: di}
+}
 
-	user, _ := repo.GetUserByID(id)
+func (userService *UserService) GetUser(id int) *entity.User {
+	user, _ := userService.di.Repository.GetUserByID(id)
 
 	return user
 }
 
-func CreateUser(user *entity.User) *entity.User {
-	repo, err := repository.NewRepository()
-	if err != nil {
-		log.Fatalf("failed to connect to the database: %v", err)
-	}
+func (userService *UserService) CreateUser(user *entity.User) *entity.User {
 
-	defer repo.Close()
-
-	createdUser, _ := repo.CreateUser(*user)
+	createdUser, _ := userService.di.Repository.CreateUser(*user)
 
 	return createdUser
 }
 
-func UpdateUser(id int, user *entity.User) *entity.User {
-	repo, err := repository.NewRepository()
-	if err != nil {
-		log.Fatalf("failed to connect to the database: %v", err)
-	}
-
-	defer repo.Close()
-
-	updatedUser, _ := repo.UpdateUser(id, *user)
+func (userService *UserService) UpdateUser(id int, user *entity.User) *entity.User {
+	updatedUser, _ := userService.di.Repository.UpdateUser(id, *user)
 
 	return updatedUser
 }
 
-func DeleteUser(id int) {
-	repo, err := repository.NewRepository()
-	if err != nil {
-		log.Fatalf("failed to connect to the database: %v", err)
-	}
-
-	defer repo.Close()
-
-	repo.DeleteUserByID(id)
+func (userService *UserService) DeleteUser(id int) {
+	userService.di.Repository.DeleteUserByID(id)
 }

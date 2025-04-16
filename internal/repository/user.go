@@ -1,30 +1,9 @@
 package repository
 
 import (
-	"database/sql"
 	_ "github.com/lib/pq"
-	"otus/config"
 	"otus/internal/entity"
 )
-
-type Repository struct {
-	db *sql.DB
-}
-
-func NewRepository() (*Repository, error) {
-	cfg, err := config.NewConfig()
-	db, err := sql.Open("postgres", cfg.PG.URL)
-	if err != nil {
-		return nil, err
-	}
-
-	// Проверяем соединение с базой данных
-	if err := db.Ping(); err != nil {
-		return nil, err
-	}
-
-	return &Repository{db: db}, nil
-}
 
 func (r *Repository) GetUserByID(id int) (*entity.User, error) {
 	var user entity.User

@@ -5,6 +5,8 @@ import (
 	"otus/config"
 	"otus/internal/app"
 	"otus/internal/container"
+	"otus/internal/repository"
+	"otus/pkg/logger"
 )
 
 func main() {
@@ -13,8 +15,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Config error: %s", err)
 	}
-	di := container.New(cfg)
+	repo, _ := repository.NewRepository()
+	l := logger.New(cfg.Log.Level)
+
+	di := container.New(cfg, repo)
 
 	// Run
-	app.Run(di)
+	app.Run(di, l)
 }
